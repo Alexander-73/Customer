@@ -1,0 +1,107 @@
+<Customers>
+  <Customer xmlns="http://www.arcusys.fi/customer-example">
+<Name>Asko A. Asiakas</Name>
+<Address>
+        <Type>VISITING_ADDRESS</Type>
+        <Street>Asiakaskatu 8 B 9</Street>
+        <Street>(PL 190)</Street>
+        <PostalCode>12346</PostalCode>
+        <Town>Asiakaskylä</Town>
+</Address>
+<Phone>
+        <Type>WORK_PHONE</Type>
+        <Value>+358555555555</Value>
+</Phone>
+<Email>
+       <Type>WORK_EMAIL</Type>
+        <Value>asko.a.asiakas@hotmail.com</Value>
+</Email>
+<Phone>
+        <Type>MOBILE_PHONE</Type>
+        <Value>+35850999999999</Value>
+</Phone>
+        <Notes>Asko on asiakas.</Notes>
+</Customer>
+<Customer xmlns="http://www.arcusys.fi/customer-example">
+    <Name>Timo Väänänen</Name>
+    <Notes>Timon infoteksti</Notes>
+    <Address>
+      <Type>HOME_ADDRESS</Type>
+      <Street>Sidoskuja 2 B 14</Street>
+      <PostalCode>33820</PostalCode>
+      <Town>Tampere</Town>
+    </Address>
+    <Phone>
+      <Type>MOBILE_PHONE</Type>
+      <Value>+358442156083</Value>
+    </Phone>
+    <Email>
+      <Type>HOME_EMAIL</Type>
+      <Value>tvaana73@gmail.com</Value>
+    </Email>
+  </Customer>
+
+ <Customer xmlns="http://www.arcusys.fi/customer-example">
+    <Name>Pekka Asiakas</Name>
+    <Notes>Pekka on uusi asiakas. Päivitetty email-osoite</Notes>
+    <Address>
+      <Type>HOME_ADDRESS</Type>
+      <Street>Peltotie 4 A</Street>
+      <PostalCode>44150</PostalCode>
+      <Town>Äänekoski</Town>
+    </Address>
+    <Phone>
+      <Type>MOBILE_PHONE</Type>
+      <Value>+358123456</Value>
+    </Phone>
+    <Email>
+      <Type>HOME_EMAIL</Type>
+      <Value>pekka@hotmail.com</Value>
+    </Email>
+  </Customer>
+<Customer xmlns="http://www.arcusys.fi/customer-example">
+    <Name>Siiri Väänänen</Name>
+    <Notes>Nuorin asiakas</Notes>
+    <Address>
+      <Type>HOME_ADDRESS</Type>
+      <Street>Sidoskuja 2 B 14</Street>
+      <PostalCode>33820</PostalCode>
+      <Town>Tampere</Town>
+    </Address>
+    <Phone>
+      <Type>MOBILE_PHONE</Type>
+      <Value>+358442730844</Value>
+    </Phone>
+  </Customer>
+<Customer xmlns="http://www.arcusys.fi/customer-example">
+    <Name>Veikko Veijari</Name>
+    <Address>
+      <Type>HOME_ADDRESS</Type>
+      <Street>Kantotie 2 B 10</Street>
+      <PostalCode>00100</PostalCode>
+      <Town>Helsinki</Town>
+    </Address>
+    <Phone>
+      <Type>WORK_PHONE</Type>
+      <Value>+3583454545</Value>
+    </Phone>
+  </Customer>
+<Customer xmlns="http://www.arcusys.fi/customer-example">
+    <Name>Yritys Oy AB</Name>
+    <Notes>Ensimmäinen yritysasiakas</Notes>
+    <Address>
+      <Type>VISITING_ADDRESS</Type>
+      <Street>Pellavatehtaankatu 2</Street>
+      <Street>(PL 23)</Street>
+      <PostalCode>00100</PostalCode>
+      <Town>Helsinki</Town>
+    </Address>
+    <Phone>
+      <Type>WORK_PHONE</Type>
+      <Value>+3589876543</Value>
+    </Phone>
+  </Customer>
+
+
+  
+</Customers>

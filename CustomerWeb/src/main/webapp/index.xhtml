@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+
+@author Timo Väänänen
+index.xhtml
+
+15-16.10.2013
+Initial page layout without any functionality. Changed initial <p:panelGrid> tags
+with <h:panelGrid> tags
+
+
+Only xhtml page for user interface.
+The UI is separated into two sections:
+1. Section for user data input
+2. Section for datalist showing saved customers
+
+Section 1 is divided into 3 column panelgrid with the intension
+that modal panels wouldn't be needed. 
+
+Errors are shown at the top part of the page
+
+@Changelog
+
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Customer management</title>
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <h:outputScript name="js/notifier.js" />
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#charcount").html(300);
+            
+            setFocus();
+        });
+        
+        function highlight()
+        {
+            Notifier.success("Removed customer");
+            //$("#customerlist").effect("highlight", {}, 3000);
+        }
+        
+        function setFocus()
+        {
+            $("#name").focus();
+        }
+        function textCounter(obj)
+        {
+            
+            var inputLength = obj.value.length;
+            
+            if(inputLength > 300)
+            {
+                obj.value = obj.value.substr(0, 300);      
+            }
+            else
+            {
+                $("#charcount").html(300-inputLength);
+            }
+        }
+        </script>
+        
+          <style>
+             
+             #waitInfo {
+                position:fixed;
+                top:5%;
+                left:5%;
+                width:200px;
+                height:200px;
+                margin-left:-100px;
+                margin-top:-100px;
+                
+           }
+         </style>
+    </h:head>
+    <h:body>
+         <h:form id="customerform" prependId="false">
+             <h:panelGrid id="customertoppanelgrid" columns="2">
+                
+                <p:commandLink title="Add new customer" oncomplete="setFocus()" update="customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" actionListener="#{customerBean.addCustomer}">
+                    <h:graphicImage value="#{resource['images:user_group_new.png']}"/>
+                </p:commandLink>
+                 
+                <p:messages id="messages" showDetail="true" closable="true" />
+             </h:panelGrid>
+             <br /><br />
+                  
+                <h:panelGrid columns="3" id="customercontainerpanelgrid">
+                    <p:panel id="customercontainerpanel" header="Customer data">
+                    <h:panelGrid columns="2" id="customerinfopanel">
+                       
+                        <h:outputText styleClass="formLabel" value="Name: *" >
+                    
+                        </h:outputText>
+                        <p:inputText id="name" required="true" value="#{customerBean.customer.name}"></p:inputText>
+                        <h:outputText styleClass="formLabel" value="Info (max 300 characters):"></h:outputText>
+                        <h:inputTextarea value="#{customerBean.customer.notes}" id="infoid" cols="30" rows="10" onkeyup="textCounter(this);" >
+                    
+                        </h:inputTextarea>
+                        <h:panelGroup>
+                            <div id="infodiv">Characters left: <span id="charcount"></span></div>
+                        </h:panelGroup><br />
+                        
+                      
+                    </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:panel header="Customer address data" id="customeraddresspanel">
+                    <h:panelGrid style="" columns="2" id="customeraddresspanelgrid">
+                        <f:facet name="header">  
+                            
+                         </f:facet>  
+                        <h:outputText styleClass="formLabel" value="Street1: *" >
+                    
+                        </h:outputText>
+                        <p:inputText required="true" id="street1" value="#{customerBean.customer.address.streets[0]}"></p:inputText>
+                 
+                        <h:outputText styleClass="formLabel" value="Street2"></h:outputText>
+                        <p:inputText id="street2" value="#{customerBean.customer.address.streets[1]}"></p:inputText>
+                       
+                        <h:outputText styleClass="formLabel" value="Postal code: *" >
+                    
+                        </h:outputText>
+                        <p:inputText required="true" id="postal" value="#{customerBean.customer.address.postalCode}"></p:inputText>
+                        <h:outputText styleClass="formLabel" value="Town: *" >
+                    
+                        </h:outputText>
+                        <p:inputText required="true" id="town" value="#{customerBean.customer.address.town}"></p:inputText>
+                        
+                        <h:outputText styleClass="formLabel" value="Type: "></h:outputText>
+                        <h:selectOneRadio value="#{customerBean.addressType}">
+                           
+                            <f:selectItem itemLabel="HOME_ADDRESS" itemValue="HOME_ADDRESS" />
+                            <f:selectItem itemLabel="VISITING_ADDRESS" itemValue="VISITING_ADDRESS" />
+                        </h:selectOneRadio>
+                   </h:panelGrid>
+                    </p:panel>
+                   <p:panel header="Customer contact types" id="customercontactpanel">
+                     <h:panelGrid columns="2" id="customercontactpanelgrid">
+                        
+                         <h:outputText styleClass="formLabel" value="Phone: *">
+                    
+                        </h:outputText>
+                         <p:inputText title="Phonenumber eg. in format +35844123456" id="phone" required="true" value="#{customerBean.phone1}"></p:inputText><br />
+                         <p:tooltip for="phone" showEvent="focus" hideEvent="blur" />  
+                            <h:outputText styleClass="formLabel" value="Type: "></h:outputText>
+                                <h:selectOneRadio value="#{customerBean.phone1Type}">
+                           
+                            <f:selectItem itemLabel="wORK" itemValue="WORK_PHONE" />
+                            <f:selectItem itemLabel="MOBILE" itemValue="MOBILE_PHONE" />
+                        </h:selectOneRadio>
+                        
+                       <h:outputText styleClass="formLabel" value="Phone: ">
+                    
+                        </h:outputText>
+                        <p:inputText id="phone2" value="#{customerBean.phone2}"></p:inputText><br />
+                        <p:tooltip for="phone2" showEvent="focus" hideEvent="blur" /> 
+                         <h:outputText styleClass="formLabel" value="Type: "></h:outputText>
+                                <h:selectOneRadio value="#{customerBean.phone2Type}">
+                           
+                            <f:selectItem itemLabel="wORK" itemValue="WORK_PHONE" />
+                            <f:selectItem itemLabel="MOBILE" itemValue="MOBILE_PHONE" />
+                        </h:selectOneRadio>
+                        <h:outputText styleClass="formLabel" value="Email: " >
+                    
+                        </h:outputText>
+                        <p:inputText id="email" value="#{customerBean.email1}"></p:inputText>
+                         <h:outputText styleClass="formLabel" value="Type: "></h:outputText>
+                                <h:selectOneRadio value="#{customerBean.email1Type}">
+                           
+                            <f:selectItem itemLabel="wORK" itemValue="WORK_EMAIL" />
+                            <f:selectItem itemLabel="HOME" itemValue="HOME_EMAIL" />
+                        </h:selectOneRadio>
+                         
+                          <h:outputText styleClass="formLabel" value="Email: " >
+                    
+                        </h:outputText>
+                        <p:inputText id="email1" value="#{customerBean.email2}"></p:inputText>
+                         <h:outputText styleClass="formLabel" value="Type: "></h:outputText>
+                                <h:selectOneRadio value="#{customerBean.email2Type}">
+                           
+                            <f:selectItem itemLabel="wORK" itemValue="WORK_EMAIL" />
+                            <f:selectItem itemLabel="HOME" itemValue="HOME_EMAIL" />
+                        </h:selectOneRadio>
+                   </h:panelGrid>
+                    </p:panel>
+                </h:panelGrid>
+             
+             <h:panelGrid id="btnpanelgrid" columns="2">
+                 <p:commandButton disabled="#{customerBean.editable}" update="customertoppanelgrid, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" id="savebtnid"
+                                  global="true" actionListener="#{customerBean.manageCustomer}" value="Save"></p:commandButton>
+                 <p:commandButton disabled="#{!customerBean.editable}" update="customertoppanelgrid, btnpanelgrid, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" actionListener="#{customerBean.manageCustomer}" id="editbtnid" global="true" value="Edit" />
+             </h:panelGrid>
+             
+             <h:panelGrid id="customerlistpanelgrid">
+                 
+                 <p:dataTable id="customerlist" value="#{customerBean.customers}" var="custitem" paginator="true" rows="5" >
+                     <f:facet name="header">
+                         Customers
+                         
+                     </f:facet>
+                    <p:column headerText="Name" >
+                        <h:outputText value="#{custitem.name}"></h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Notes"> 
+                     <h:outputText value="#{custitem.notes}"></h:outputText>
+                </p:column>
+                 
+                <p:column headerText="Street1"> 
+                    <h:outputText value="#{custitem.address.streets[0]}"></h:outputText>
+                </p:column>
+                     
+                 <p:column headerText="Street2"> 
+                    <h:outputText value="#{custitem.address.streets[1]}"></h:outputText>
+                </p:column>
+                 
+                <p:column headerText="Postal code"> 
+                    <h:outputText value="#{custitem.address.postalCode}"></h:outputText>
+                </p:column>
+                     
+                 <p:column headerText="Town"> 
+                     <h:outputText value="#{custitem.address.town}"></h:outputText>
+                </p:column>
+                     
+                 <p:column headerText="Type"> 
+                     <h:outputText value="#{custitem.address.addressType}"></h:outputText>
+                </p:column>
+                 
+                 <p:column headerText="Contacts"> 
+                     <p:dataGrid columns="1" value="#{custitem.contacts}" var="contact">
+                     
+                         <h:outputText value="#{contact.value}"/>
+                         <h:outputText value="#{contact.contactType}"/>  
+                     
+                     </p:dataGrid>
+                </p:column>
+                     
+                   <p:column> 
+                      <p:commandLink title="Edit customer" global="true" update=":customerform:customerinfopanel, :customerform:customeraddresspanelgrid, :customerform:customerlistpanelgrid, :customerform:customercontactpanelgrid, :customerform:btnpanelgrid" process="@this" action="#{customerBean.editCustomer}" >  
+                          <h:graphicImage value="#{resource['images:user_male_edit.png']}"/>
+                          <f:setPropertyActionListener value="#{custitem}" target="#{customerBean.selectedCustomer}"/>
+                      </p:commandLink>
+                     
+                      
+                </p:column>
+                
+                  
+               <p:column> 
+                   <p:commandLink title="Remove customer" onclick="confirmation.show()" global="true" process="@this">  
+                      <h:graphicImage url="#{resource['images:remove.png']}"/>
+                      <f:setPropertyActionListener value="#{custitem}" target="#{customerBean.selectedCustomer}"/>
+                      
+                   </p:commandLink> 
+                </p:column>
+                 </p:dataTable>
+             </h:panelGrid>
+             
+              <p:confirmDialog widgetVar="confirmation" header="Confirmation" showEffect="slide">
+                
+                    <h:outputText value="Remove #{customerBean.selectedCustomer.name}??"/><br />
+                    <p:commandButton global="true" process="@this" value="Yes" update="customerlistpanelgrid" oncomplete="confirmation.hide(); highlight();" actionListener="#{customerBean.removeCustomer}" />          
+                    <p:commandButton value="No" onclick="confirmation.hide()"/>
+                
+              
+            </p:confirmDialog>
+         </h:form>
+        
+        <div id="waitInfo" >
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <h:graphicImage url="#{resource['images:ajax-loader.gif']}"></h:graphicImage>
+            </f:facet>
+            
+            <f:facet name="complete">
+                <h:graphicImage value=""></h:graphicImage>
+            </f:facet>
+        </p:ajaxStatus>
+      
+        </div>
+    </h:body>
+</html>
+
