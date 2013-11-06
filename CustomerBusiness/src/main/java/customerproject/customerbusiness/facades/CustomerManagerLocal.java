@@ -6,11 +6,8 @@ package customerproject.customerbusiness.facades;
 
 import customerproject.customerbusiness.datamodel.Customer;
 import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import javax.ejb.Local;
-import javax.ejb.Stateless;
-import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -26,5 +23,6 @@ public interface CustomerManagerLocal {
    public void editCustomer(File file, Customer customer);
    
    public void deleteCustomer(File file, Customer customer);
-
+   
+   
 }

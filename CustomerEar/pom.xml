@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>Customer</artifactId>
+    <groupId>CustomerProject</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>CustomerProject</groupId>
+  <artifactId>CustomerEar</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>ear</packaging>
+
+  <name>CustomerEar</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ear-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+            <version>6</version>
+            <defaultLibBundleDir>lib</defaultLibBundleDir>
+            <modules>
+                <ejbModule>
+                    
+                    <groupId>CustomerProject</groupId>
+                    <artifactId>CustomerBusiness</artifactId>
+                </ejbModule>
+                <webModule>
+                    <groupId>CustomerProject</groupId>
+                    <artifactId>CustomerWeb</artifactId>
+                    <contextRoot>/CustomerWeb</contextRoot>
+                </webModule>
+                <jarModule>
+                     <groupId>CustomerProject</groupId>
+                    <artifactId>CustomerUtilities</artifactId>
+                    
+                </jarModule>
+                <ejbModule>
+                    
+                    <groupId>CustomerProject</groupId>
+                    <artifactId>CustomerIntegration</artifactId>
+                </ejbModule>
+            
+            </modules>
+        </configuration>
+      </plugin>
+          <plugin>
+                <groupId>org.glassfish.maven.plugin</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>gf-undeploy</id>
+                        <goals>
+                            <goal>undeploy</goal>
+                        </goals>
+                        <phase>clean</phase>
+                    </execution>
+                    <execution>
+                        
+                        <id>gf-deploy</id>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <glassfishDirectory>/home/timovaananen/glassfish3/glassfish</glassfishDirectory>
+                    <domainDirectory>/home/timovaananen/glassfish3/glassfish/domains/domain1</domainDirectory>
+                    <user>admin</user>
+                    <passwordFile>/home/timovaananen/glassfish3/glassfish/domains/domain1/master-password</passwordFile>
+                    <autoCreate>true</autoCreate>
+                    <debug>true</debug>
+                    <echo>true</echo>
+                    <terse>false</terse>
+                    <autoCreate>true</autoCreate>
+                    
+                    <domain>
+                        <name>domain1</name>
+                        <host>localhost</host>
+                        <adminPort>4848</adminPort>
+                        <httpPort>8080</httpPort>
+                    </domain>
+                    <components>
+                        <component>
+                            <name>Customer</name>
+                            <artifact>target/CustomerEar-1.0-SNAPSHOT.ear</artifact>
+                        </component>
+                    </components>
+                  
+                </configuration>
+               
+            </plugin>
+        </plugins>
+  </build>
+ 
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CustomerWeb</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CustomerBusiness</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CustomerUtilities</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CustomerIntegration</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
+</project>

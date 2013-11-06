@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+      
+         <style>
+             
+             .error {
+                 
+                 color:red;
+                 font-weight:bold;
+             }
+             
+             .succes {
+                 
+                 color:green;
+                 font-weight:bold;
+             }
+         </style>
+    </h:head>
+    <h:body>
+       
+        <h:form id="loginform" prependId="false" >
+            
+            <!--<p:messages id="msgid" for="messages" ></p:messages>-->
+            <p:dialog header="Login" visible="true" widgetVar="dlg" id="dialog" resizable="false" closable="false" >
+                <h:outputText rendered="#{notificationBean.state eq 'error'}" styleClass="error" value="#{notificationBean.displayInfo}"></h:outputText>
+                <h:outputText rendered="#{notificationBean.state eq 'success'}" styleClass="success" value="#{notificationBean.displayInfo}"></h:outputText>
+                <h:panelGrid columns="2" id="loginpanelgrid">
+                    <h:outputText value="Username: "></h:outputText>
+                    <p:inputText id="usernameid" value="#{loginBean.user.username}" required="true"></p:inputText>
+                    <h:outputText value="Password: "></h:outputText>
+                    <h:inputSecret id="passwordid" value="#{loginBean.password}" required="true"></h:inputSecret>
+                    
+                    <p:commandButton update="loginpanelgrid" value="Login" action="#{loginBean.checkCustomer}" ></p:commandButton>
+                </h:panelGrid>
+                <p:commandLink process="@this" value="Register" action="#{loginBean.directTo}">
+                    <f:setPropertyActionListener value="/register?faces-redirect=true" target="#{loginBean.linkToDirect}"></f:setPropertyActionListener>
+                </p:commandLink>
+                
+            </p:dialog>
+            
+            
+        </h:form>
+    </h:body>
+</html>
+

@@ -21,6 +21,15 @@ that modal panels wouldn't be needed.
 Errors are shown at the top part of the page
 
 @Changelog
+24.10.2013
+
+When removing customer, customers name didn't show up in the confirmation dialog
+because confirmation dialog was opened by javascript function call onClick().
+Changed that to oncomplete and now <f:setPropertyActionListener> tag works
+
+24.10.2013
+Added feedback to the user when adding, editing or deleting a customer. Datatable gets
+a jQuery highlight effect. JQuery is invoked with oncomplete event
 
 -->
 
@@ -42,8 +51,11 @@ Errors are shown at the top part of the page
         
         function highlight()
         {
-            Notifier.success("Removed customer");
-            //$("#customerlist").effect("highlight", {}, 3000);
+            //Notifier.success("Removed customer");
+            //$("div#customerlist td:first").addClass("highlight");
+            $("div#customerlist td").each(function() {
+                
+            }).effect("highlight", {}, 3000);
         }
         
         function setFocus()
@@ -70,28 +82,37 @@ Errors are shown at the top part of the page
              
              #waitInfo {
                 position:fixed;
-                top:5%;
-                left:5%;
+                top:50%;
+                left:50%;
                 width:200px;
                 height:200px;
                 margin-left:-100px;
                 margin-top:-100px;
                 
            }
+           
+           .highlight {
+               background-color:yellow;
+           }
          </style>
     </h:head>
     <h:body>
          <h:form id="customerform" prependId="false">
-             <h:panelGrid id="customertoppanelgrid" columns="2">
-                
-                <p:commandLink title="Add new customer" oncomplete="setFocus()" update="customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" actionListener="#{customerBean.addCustomer}">
+             
+                <h:outputText value="User: "></h:outputText> <h:outputText value="#{loginBean.user.username}"></h:outputText><br />
+                <h:outputText value="Last login: "></h:outputText> 
+                <h:outputText value="#{loginBean.user.lastLogin}">
+                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="Europe/Helsinki" />
+                </h:outputText><br />
+                <p:commandLink process="@this" value="Log out" action="#{loginBean.logOut}"></p:commandLink>
+                <p:commandLink id="addcustomerid" title="Add new customer" oncomplete="setFocus()" update="btnpanelgrid, customerinfopanel, customeraddresspanelgrid, customercontactpanelgrid" actionListener="#{customerBean.addCustomer}">
                     <h:graphicImage value="#{resource['images:user_group_new.png']}"/>
                 </p:commandLink>
                  
                 <p:messages id="messages" showDetail="true" closable="true" />
-             </h:panelGrid>
+           
              <br /><br />
-                  
+            
                 <h:panelGrid columns="3" id="customercontainerpanelgrid">
                     <p:panel id="customercontainerpanel" header="Customer data">
                     <h:panelGrid columns="2" id="customerinfopanel">
@@ -129,7 +150,7 @@ Errors are shown at the top part of the page
                     
                         </h:outputText>
                         <p:inputText required="true" id="postal" value="#{customerBean.customer.address.postalCode}"></p:inputText>
-                        <h:outputText styleClass="formLabel" value="Town: *" >
+                    <h:outputText styleClass="formLabel" value="Town: *" >
                     
                         </h:outputText>
                         <p:inputText required="true" id="town" value="#{customerBean.customer.address.town}"></p:inputText>
@@ -194,9 +215,9 @@ Errors are shown at the top part of the page
                 </h:panelGrid>
              
              <h:panelGrid id="btnpanelgrid" columns="2">
-                 <p:commandButton disabled="#{customerBean.editable}" update="customertoppanelgrid, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" id="savebtnid"
+                 <p:commandButton oncomplete="if(#{!facesContext.validationFailed}) highlight();" disabled="#{customerBean.editable}" update="messages, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" id="savebtnid"
                                   global="true" actionListener="#{customerBean.manageCustomer}" value="Save"></p:commandButton>
-                 <p:commandButton disabled="#{!customerBean.editable}" update="customertoppanelgrid, btnpanelgrid, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" actionListener="#{customerBean.manageCustomer}" id="editbtnid" global="true" value="Edit" />
+                 <p:commandButton oncomplete="if(#{!facesContext.validationFailed}) highlight();" disabled="#{!customerBean.editable}" update="messages, btnpanelgrid, customerinfopanel, customeraddresspanelgrid, customerlistpanelgrid, customercontactpanelgrid" actionListener="#{customerBean.manageCustomer}" id="editbtnid" global="true" value="Edit" />
              </h:panelGrid>
              
              <h:panelGrid id="customerlistpanelgrid">
@@ -254,7 +275,7 @@ Errors are shown at the top part of the page
                 
                   
                <p:column> 
-                   <p:commandLink title="Remove customer" onclick="confirmation.show()" global="true" process="@this">  
+                   <p:commandLink title="Remove customer" update=":customerform:confirmdlgid" oncomplete="confirmation.show();" global="true" process="@this">  
                       <h:graphicImage url="#{resource['images:remove.png']}"/>
                       <f:setPropertyActionListener value="#{custitem}" target="#{customerBean.selectedCustomer}"/>
                       
@@ -263,7 +284,7 @@ Errors are shown at the top part of the page
                  </p:dataTable>
              </h:panelGrid>
              
-              <p:confirmDialog widgetVar="confirmation" header="Confirmation" showEffect="slide">
+              <p:confirmDialog id="confirmdlgid" widgetVar="confirmation" header="Confirmation" showEffect="slide">
                 
                     <h:outputText value="Remove #{customerBean.selectedCustomer.name}??"/><br />
                     <p:commandButton global="true" process="@this" value="Yes" update="customerlistpanelgrid" oncomplete="confirmation.hide(); highlight();" actionListener="#{customerBean.removeCustomer}" />          
@@ -271,9 +292,11 @@ Errors are shown at the top part of the page
                 
               
             </p:confirmDialog>
+               
          </h:form>
         
-        <div id="waitInfo" >
+        <div id="waitInfo">
+           
         <p:ajaxStatus>
             <f:facet name="start">
                 <h:graphicImage url="#{resource['images:ajax-loader.gif']}"></h:graphicImage>
@@ -283,7 +306,7 @@ Errors are shown at the top part of the page
                 <h:graphicImage value=""></h:graphicImage>
             </f:facet>
         </p:ajaxStatus>
-      
+           
         </div>
     </h:body>
 </html>

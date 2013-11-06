@@ -7,7 +7,6 @@ import customerproject.customerbusiness.datamodel.ContactType;
 import customerproject.customerbusiness.datamodel.EmailModel;
 import customerproject.customerbusiness.datamodel.Phone;
 import customerproject.customerbusiness.facades.CustomerManagerLocal;
-import customerproject.customerbusiness.services.Parser;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -60,7 +59,7 @@ public class CustomerBean implements Serializable {
     private String email1Type;
     private String email2Type;
     
-    @EJB 
+    @EJB
     private CustomerManagerLocal manager;
 
     public CustomerBean() throws URISyntaxException {
@@ -156,11 +155,12 @@ public class CustomerBean implements Serializable {
     
     public void addCustomer() {
         this.editable = false;
+        
+        this.customer = new Customer();
     }
     public boolean isEditable() {
         return editable;
     }
-
     public void setEditable(boolean editable) {
         this.editable = editable;
     }

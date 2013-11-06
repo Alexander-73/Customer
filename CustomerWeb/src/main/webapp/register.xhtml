@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        
+         <script type="text/javascript">
+             function show() {
+                 
+                 alert("Show on error");
+                 $("#usernameid").focus();
+             }
+         </script>
+    </h:head>
+    <h:body>
+        <h:form id="registrationform" prependId="false" >
+            <p:dialog header="Registration" visible="true" widgetVar="regdlg" id="regdlgid" resizable="false" closable="false" >
+            <p:messages id="msgid" for="messages" ></p:messages>
+            <h:panelGrid columns="2" id="registrationpanelgrid">
+                    <h:outputText value="Username: *"></h:outputText>
+                    <p:inputText id="usernameid" value="#{loginBean.userName}" required="true" >
+                        <f:validator binding="#{userNameChecker}"></f:validator>
+                        <f:ajax event="blur" execute="@this" render="msgid usernameid"></f:ajax>
+                    </p:inputText>
+                    <h:outputText value="Password: *"></h:outputText>
+                    <h:inputSecret id="passwordid" value="#{loginBean.password}" required="true">
+                        <f:validator validatorId="passwordValidator"></f:validator>
+                        <f:attribute name="confirm" value="#{confirmPassword.submittedValue}" />
+                        <f:ajax event="blur" execute="passwordid passwordid2" render="msgid" ></f:ajax>
+                    
+                    </h:inputSecret>
+                    <h:outputText value="Password again: *"></h:outputText>
+                    <h:inputSecret binding="#{confirmPassword}" id="passwordid2" required="true">
+                        
+                        <f:ajax event="blur" execute="passwordid passwordid2" render="msgid" ></f:ajax>
+                    </h:inputSecret>
+                    <h:outputText value="Email: *"></h:outputText>
+                    <p:inputText id="email" value="#{loginBean.email}" required="true">
+                        <f:validator validatorId="emailValidator"></f:validator>
+                        <f:ajax execute="email email2" onevent="blur" render="msgid"></f:ajax>
+                        <f:attribute name="confirmemail" value="#{confirmEmail.submittedValue}" ></f:attribute>
+                    </p:inputText>
+                    <h:outputText value="Email again: *"></h:outputText>
+                    <p:inputText id="email2" binding="#{confirmEmail}" required="true">
+                        <f:ajax onevent="blur" execute="email email2" render="msgid"></f:ajax>
+                    
+                    </p:inputText>
+                    
+                    <p:commandButton global="true" update="msgid, registrationpanelgrid" value="Register" action="#{loginBean.preRegister}" ></p:commandButton>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+         <div id="waitInfo" >
+        <p:ajaxStatus>
+            <f:facet name="start">
+                <h:graphicImage url="#{resource['images:ajax-loader.gif']}"></h:graphicImage>
+            </f:facet>
+            
+            <f:facet name="complete">
+                <h:graphicImage value=""></h:graphicImage>
+            </f:facet>
+        </p:ajaxStatus>
+      
+        </div>
+    </h:body>
+</html>
+

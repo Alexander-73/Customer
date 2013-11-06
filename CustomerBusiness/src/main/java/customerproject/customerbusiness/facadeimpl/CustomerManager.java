@@ -5,6 +5,7 @@
 package customerproject.customerbusiness.facadeimpl;
 
 import customerproject.customerbusiness.datamodel.Customer;
+import customerproject.customerbusiness.entities.User;
 import customerproject.customerbusiness.facades.CustomerManagerLocal;
 import customerproject.customerbusiness.services.Parser;
 import java.io.File;
@@ -17,8 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
-import javax.xml.bind.JAXBException;
 import org.jdom.JDOMException;
 
 /**
@@ -28,7 +27,7 @@ import org.jdom.JDOMException;
 @Stateless
 public class CustomerManager implements CustomerManagerLocal, Serializable {
 
-    @EJB 
+    @EJB
     Parser parser;
     
     public void saveCustomer(File f, Customer cust)
@@ -70,4 +69,5 @@ public class CustomerManager implements CustomerManagerLocal, Serializable {
         parser.deleteCustomer(f, cust);
     }
 
+    
 }
